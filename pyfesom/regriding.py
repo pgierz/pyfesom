@@ -155,9 +155,12 @@ def fesom2regular(
         # distances_ma = np.ma.masked_greater(distances, radius_of_influence)
         data_interpolated = data[inds]
 
-        data_interpolated[distances >= radius_of_influence] = np.nan
+        # Not sure about this:
+        data_interpolated_with_nan = np.where(
+            distances >= radius_of_influence, np.nan, data_interpolated
+        )  # ...? # data_interpolated[distances >= radius_of_influence] = np.nan
 
-        data_interpolated = data_interpolated.reshape(lons.shape)
+        data_interpolated = data_interpolated_with_nan.reshape(lons.shape)
         data_interpolated = np.ma.masked_invalid(data_interpolated)
     else:
         distances_ma = np.ma.masked_greater(distances, radius_of_influence)
